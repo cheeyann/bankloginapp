@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "35716058140",
+    "firebase_url": "https://xinbank-6b05a.firebaseio.com",
+    "project_id": "xinbank-6b05a",
+    "storage_bucket": "xinbank-6b05a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35716058140:android:daf580a6912e43ef1c23d9",
+        "android_client_info": {
+          "package_name": "com.example.xinbank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35716058140-v1sivfvo5i3ri9q1neujc0va6c88cdt1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.xinbank",
+            "certificate_hash": "9d8b118d3df64f950894f168498d3fb12119d022"
+          }
+        },
+        {
+          "client_id": "35716058140-c0hbnlb4o6erl6mn4gmv456cg6aa3dqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdaoLfbCLPuCp4QaKlE0FWlEYTEqDtF_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35716058140-c0hbnlb4o6erl6mn4gmv456cg6aa3dqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
