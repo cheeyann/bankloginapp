@@ -102,6 +102,7 @@ public class access_control extends AppCompatActivity {
         Intent intent = new Intent(this,show_otu.class);
         intent.putExtra("otu", otname);
         startActivity(intent);
+        finish();
     }
 
 }

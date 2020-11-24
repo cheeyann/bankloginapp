@@ -100,6 +100,7 @@ public class show_otu extends AppCompatActivity {
     private void openloginpassword(){
         Intent intent = new Intent(this,loginPassword.class);
         startActivity(intent);
+        finish();
     }
     private static class countdown {
             static CountDownTimer countdowntimer = new CountDownTimer(30000, 1000) {

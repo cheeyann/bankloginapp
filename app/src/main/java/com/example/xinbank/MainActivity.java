@@ -115,9 +115,11 @@ public class MainActivity extends AppCompatActivity {
     private void openAccessControl(){
         Intent intent = new Intent(this,access_control.class);
         startActivity(intent);
+        finish();
     }
     private void opensignin(){
         Intent intentsignin = new Intent(this,signIn.class);
         startActivity(intentsignin);
+        finish();
     }
 }
