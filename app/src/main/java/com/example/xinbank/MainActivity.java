@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView msgtxt, msgname;
+    private TextView msgtxt, msgname, msgprofile;
     private Button loginbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
         msgtxt = findViewById(R.id.homehint);
         msgname = findViewById(R.id.homename);
+        msgprofile = findViewById(R.id.homeprofile);
         loginbtn = findViewById(R.id.login_btn);
         getusername();
         BiometricManager biometricManager = BiometricManager.from(this);
         switch(biometricManager.canAuthenticate()){
             case BiometricManager.BIOMETRIC_SUCCESS:
                 msgtxt.setText("You can use fingerprint to login");
-                msgtxt.setTextColor(Color.parseColor("#fafafa"));
+                msgtxt.setTextColor(Color.parseColor("#000000"));
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
                 msgtxt.setText("no sensor");
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 loginbtn.setVisibility(View.GONE);
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                msgtxt.setText("no fingerprint set, please check security setting");
+                msgtxt.setText("No fingerprint set, please check security setting to set your fingerprint else you cannot proceed to request your one time username");
                 loginbtn.setVisibility(View.GONE);
                 break;
         }
@@ -100,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     String namefromdb = dataSnapshot.child("1111").child("signinName").getValue(String.class);
                     msgname.setText(namefromdb);
+                    char profileicon = namefromdb.charAt(1);
+                    msgprofile.setText(profileicon);
                 } else {
                     msgname.setText("haven't register");
                     opensignin();
