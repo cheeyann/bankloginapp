@@ -52,12 +52,14 @@ public class OTUgenerator {
         }
     }
     //put char in random empty of array
+    //a = case choose
     public String[] putInsideArray(String[]strarray, String randomchar){
         int count = 0;
         int index = rnd.nextInt(strarray.length);
         boolean notfinish = true;
         //randomly pick 5 places, 3 left str will ascending order placed
         if(count<5){
+            //loop until find an random empty space in the array
             while(notfinish){
                 if(strarray[index]==null){
                     strarray[index]=a;

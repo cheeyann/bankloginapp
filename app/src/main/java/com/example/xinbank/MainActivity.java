@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView msgtxt, msgname, msgprofile;
+    private TextView msgtxt, msgname;
     private Button loginbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
         msgtxt = findViewById(R.id.homehint);
         msgname = findViewById(R.id.homename);
-        msgprofile = findViewById(R.id.homeprofile);
         loginbtn = findViewById(R.id.login_btn);
         getusername();
         BiometricManager biometricManager = BiometricManager.from(this);
         switch(biometricManager.canAuthenticate()){
             case BiometricManager.BIOMETRIC_SUCCESS:
-                msgtxt.setText("You can use fingerprint to login");
+                msgtxt.setText("Fingerprint verification is needed before requesting, please press button below");
                 msgtxt.setTextColor(Color.parseColor("#000000"));
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         });
         //create biometric dialog
         final BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Login")
+                .setTitle("Fingerprint verification")
                 .setDescription("Use your fingerprint to get into the app")
                 .setNegativeButtonText("Cancel")
                 .build();
@@ -93,16 +92,18 @@ public class MainActivity extends AppCompatActivity {
     }
     private void getusername(){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkuser = reference.orderByChild("signinImei").equalTo("1111");
+        Query checkuser = reference.orderByChild("signinImei").equalTo("000000000000000");
 
         checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String namefromdb = dataSnapshot.child("1111").child("signinName").getValue(String.class);
+                    String namefromdb = dataSnapshot.child("000000000000000").child("signinName").getValue(String.class);
+                    //String profilename = namefromdb;
                     msgname.setText(namefromdb);
-                    char profileicon = namefromdb.charAt(1);
-                    msgprofile.setText(profileicon);
+//                    char profileicon = (char)profilename.toString().toUpperCase().charAt(0);
+//                    msgname.setText(profileicon);
+//                    msgprofile.setText(profileicon);
                 } else {
                     msgname.setText("haven't register");
                     opensignin();

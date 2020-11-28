@@ -29,7 +29,7 @@ public class access_control extends AppCompatActivity {
     RadioButton acActivebtnn, acPassivebtnn;
     Button acRequestbtnn;
     Boolean active;
-    String imei="1111", otname="" , result="";
+    String imei="000000000000000", otname="" , result="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,6 @@ public class access_control extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Request could not be saved"+ databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), result +"Request success", Toast.LENGTH_SHORT).show();
-                    actextt.setText(helperClass.toString());
                     openshowotu();
                 }
             }
