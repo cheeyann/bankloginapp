@@ -22,8 +22,11 @@ public class messageHelperClass {
         return timestamp;
     }
 
-    public void setTimestamp() {
-        generateTimestamp();
+    public void setTimestamp() { generateTimestamp(); }
+
+    private void generateTimestamp() {
+        Date date = new Date();
+        timestamp = date.getTime();
     }
 
     public String getImei() {
@@ -58,9 +61,7 @@ public class messageHelperClass {
                 ", accessControl=" + accessControl + '\'' +
                 ", otu='" + otu + '\'' ;
     }
-    private void generateTimestamp(){
-        Date date = new Date();
-        timestamp = date.getTime();
+
         /*
         int isvalid=0 ;
         long timemilli = date.getTime();
@@ -75,5 +76,5 @@ public class messageHelperClass {
 
         */
         //showing.setText("time now = "+timemilli + "result = "+result + "\n in day = "+ day +"\n in hour = "+ hour +"\n in minute = "+ minu +"\n in second = "+ sec +"\n validity = "+isvalid);
-    }
+
 }
