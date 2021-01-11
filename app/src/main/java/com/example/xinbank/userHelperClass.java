@@ -2,57 +2,88 @@ package com.example.xinbank;
 
 import androidx.annotation.NonNull;
 
+import java.util.Date;
+
 public class userHelperClass {
-    private String signinName, signinImei, signinPhone,signinEmail, signinCard;
+
+    private String username;
+    private String password;
+    private String IMEI;
+    private Long timestamp;
+    private Boolean is_login;
+    private String card_num;
+    private String onlinecustomer_id;
 
     public userHelperClass() {
     }
 
-    public userHelperClass(String signinName, String signinImei, String signinPhone, String signinEmail, String signinCard) {
-        this.signinName = signinName;
-        this.signinImei = signinImei;
-        this.signinPhone = signinPhone;
-        this.signinEmail = signinEmail;
-        this.signinCard = signinCard;
+    public userHelperClass(String username, String password, String IMEI, Long timestamp, Boolean is_login, String card_num, String onlinecustomer_id) {
+        this.username = username;
+        this.password = password;
+        this.IMEI = IMEI;
+        this.timestamp = timestamp;
+        this.is_login = is_login;
+        this.card_num = card_num;
+        this.onlinecustomer_id = onlinecustomer_id;
     }
 
-    public String getSigninName() {
-        return signinName;
+    private void generateTimestamp() {
+        Date date = new Date();
+        timestamp = date.getTime();
+    }
+    public String getUsername() {
+        return username;
     }
 
-    public void setSigninName(String signinName) {
-        this.signinName = signinName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getSigninImei() {
-        return signinImei;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSigninImei(String signinImei) {
-        this.signinImei = signinImei;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getSigninPhone() {
-        return signinPhone;
+    public String getIMEI() {
+        return IMEI;
     }
 
-    public void setSigninPhone(String signinPhone) {
-        this.signinPhone = signinPhone;
+    public void setIMEI(String IMEI) {
+        this.IMEI = IMEI;
     }
 
-    public String getSigninEmail() {
-        return signinEmail;
+    public Long getTimestamp() {
+        return timestamp;
     }
 
-    public void setSigninEmail(String signinEmail) {
-        this.signinEmail = signinEmail;
+    public void setTimestamp() {
+        generateTimestamp();
     }
 
-    public String getSigninCard() {
-        return signinCard;
+    public Boolean getIs_login() {
+        return is_login;
     }
 
-    public void setSigninCard(String signinCard) {
-        this.signinCard = signinCard;
+    public void setIs_login(Boolean is_login) {
+        this.is_login = is_login;
+    }
+
+    public String getCard_num() {
+        return card_num;
+    }
+
+    public void setCard_num(String card_num) {
+        this.card_num = card_num;
+    }
+
+    public String getOnlinecustomer_id() {
+        return onlinecustomer_id;
+    }
+
+    public void setOnlinecustomer_id(String onlinecustomer_id) {
+        this.onlinecustomer_id = onlinecustomer_id;
     }
 }

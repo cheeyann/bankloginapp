@@ -25,6 +25,7 @@ public class show_otu extends AppCompatActivity {
     private TextView showotu;
     private static TextView showtime;
     private Button syesbtn, snobtn;
+    String user_otu, otufromaccesscontrol;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +47,11 @@ public class show_otu extends AppCompatActivity {
         snobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
     }
 
-    private String showotumethod(){
-        Intent intent = getIntent();
-        String user_otu = intent.getStringExtra("otu");
-        return user_otu;
-    }
+
     private boolean witnin5minute(Long timefromdb){
         Date date = new Date();
         long timemilli = date.getTime();
@@ -69,7 +65,7 @@ public class show_otu extends AppCompatActivity {
         return false;
     }
     private void checkdata(){
-        final String otufromaccesscontrol = sha.otuhashing(showotumethod());
+        otufromaccesscontrol = sha.otuhashing(showotumethod());
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("message");
         Query checkuserotu = reference.orderByChild("otu").equalTo(otufromaccesscontrol);
 
@@ -97,11 +93,18 @@ public class show_otu extends AppCompatActivity {
         });
 
     }
+    private String showotumethod(){
+        Intent intent = getIntent();
+        user_otu = intent.getStringExtra("otu");
+        return user_otu;
+    }
     private void openloginpassword(){
-        Intent intent = new Intent(this,loginPassword.class);
+        Intent intent = new Intent(getApplicationContext(),loginPassword.class);
+        intent.putExtra("otu",otufromaccesscontrol);
         startActivity(intent);
         finish();
     }
+
     private static class countdown {
             static CountDownTimer countdowntimer = new CountDownTimer(30000, 1000) {
                 public void onTick(long millisUntilFinished) {

@@ -6,18 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class signIn extends AppCompatActivity {
-    private TextView sname, simei, sphone, semail, scard;
+    private TextView sname, sid, scard, scardvalid, scardcvv, scardpin;
     private Button signinBTN;
 
     @Override
@@ -25,10 +29,11 @@ public class signIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         sname = findViewById(R.id.signinName);
-        simei = findViewById(R.id.signinImei);
-        sphone = findViewById(R.id.signinPhone);
-        semail = findViewById(R.id.signinEmail);
-        scard = findViewById(R.id.signinCard);
+        sid = findViewById(R.id.signinID);
+        scard = findViewById(R.id.signinCardno);
+        scardvalid = findViewById(R.id.signinCardValidDate);
+        scardcvv = findViewById(R.id.signinCardCVV);
+        scardpin = findViewById(R.id.editTextNumberPassword);
         signinBTN = findViewById(R.id.signinbtn);
 
         signinBTN.setOnClickListener(new View.OnClickListener() {
@@ -37,35 +42,100 @@ public class signIn extends AppCompatActivity {
                 signin();
             }
         });
-    }
+
+
+            }
+
     private void signin(){
-        final String ssname, ssimei, ssphone, ssemail, sscard;
+        final String ssname = sname.getText().toString().trim();
+        final String ssid = sid.getText().toString().trim(); //IC
+        final String sscard = scard.getText().toString().trim();
+        final String sscardvalid = scardvalid.getText().toString().trim();
+        final String sscardcvv = scardcvv.getText().toString().trim();
+        final String sscardpin = scardpin.getText().toString().trim();
 
-        ssname = sname.getText().toString().trim();
-        ssimei = simei.getText().toString().trim();
-        ssphone = sphone.getText().toString().trim();
-        ssemail = semail.getText().toString().trim();
-        sscard = scard.getText().toString().trim();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("imeiExist");
+        Query checkuser = reference.orderByChild("ic").equalTo(ssid);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users");
-        userHelperClass usershelper = new userHelperClass(ssname, ssimei, ssphone,ssemail, sscard);
-        myRef.child(ssimei).setValue(usershelper,new DatabaseReference.CompletionListener(){
+        checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    Toast.makeText(getApplicationContext(), "Data could not be saved"+ databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    //System.out.println("Data could not be saved " + databaseError.getMessage());
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    final String idfromdb= dataSnapshot.child(ssid).child("_id").getValue(String.class);
+                    DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Customers");
+                    //get cus data
+                    Query checkuser2 = reference2.orderByChild("user_id").equalTo(idfromdb);
+                    checkuser2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                final String icfromdb= dataSnapshot.child(idfromdb).child("ic").getValue(String.class);
+                                final String namefromdb = dataSnapshot.child(idfromdb).child("fullname").getValue(String.class);
+                                final String phonefromdb = dataSnapshot.child(idfromdb).child("phone").getValue(String.class);
+
+                                //get bank acc data
+                                DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Customers");
+                                reference3.child(idfromdb).child("BankAccountCust").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            final String bankcardfromdb = dataSnapshot.child("account_card_num").getValue(String.class);
+                                            final String bankcardvalidfromdb = dataSnapshot.child("account_card_validdate").getValue(String.class);
+                                            final String bankcardcvvfromdb = dataSnapshot.child("account_card_cvv").getValue(String.class);
+                                            //later change to pin
+                                            final String bankcardpinfromdb = dataSnapshot.child("account_type").getValue(String.class);
+                                            // check user enter info same with db
+                                            if(ssid.equals(icfromdb) && ssname.equals(namefromdb) && sscard.equals(bankcardfromdb) && sscardvalid.equals(bankcardvalidfromdb) && sscardcvv.equals(bankcardcvvfromdb) && sscardpin.equals(bankcardpinfromdb) ){
+                                                //yes correct
+                                                Toast.makeText(getApplicationContext(), "All data correct, Verified", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getApplicationContext(),signInSetname.class);
+                                                intent.putExtra("name",namefromdb);
+                                                intent.putExtra("id",idfromdb);
+                                                intent.putExtra("cardnum",bankcardfromdb);
+                                                intent.putExtra("ic",icfromdb);
+                                                intent.putExtra("phone",phonefromdb);
+                                                startActivity(intent);
+                                                finish();
+
+                                            }else{
+                                                //wrong
+                                                Toast.makeText(getApplicationContext(), "Data enter wrongly", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            //bank acc no user
+                                            Toast.makeText(getApplicationContext(), "No this user bank account", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.w("loadPost:onCancelled", databaseError.toException());
+                                        // bank acc db error
+                                        Toast.makeText(getApplicationContext(), "Database error in user bank account", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                //no user in cus
+                                Toast.makeText(getApplicationContext(), "No this user account", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.w("loadPost:onCancelled", databaseError.toException());
+                            //db error in cus
+                            Toast.makeText(getApplicationContext(), "Database error in user account", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
-                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                    opensigninpassword();
+                    //no user in db
+                    Toast.makeText(getApplicationContext(), "No this user", Toast.LENGTH_SHORT).show();
                 }
             }
-        } );
-
-    }
-    private void opensigninpassword(){
-        Intent intent = new Intent(this,signinPassword.class);
-        startActivity(intent);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("loadPost:onCancelled", databaseError.toException());
+                //db error
+                Toast.makeText(getApplicationContext(), "Database error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

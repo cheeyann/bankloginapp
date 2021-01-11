@@ -5,17 +5,19 @@ import java.util.Date;
 public class messageHelperClass {
     Long timestamp;
     String imei;
-    Boolean accessControl;
+    String accessControl;
     String otu;
+    String id;
 
     public messageHelperClass() {
     }
 
-    public messageHelperClass(Long timestamp, String imei, Boolean accessControl, String otu) {
+    public messageHelperClass(Long timestamp, String imei, String accessControl, String otu,String id) {
         this.timestamp = timestamp;
         this.imei = imei;
         this.accessControl = accessControl;
         this.otu = otu;
+        this.id=id;
     }
 
     public Long getTimestamp() {
@@ -37,11 +39,11 @@ public class messageHelperClass {
         this.imei = imei;
     }
 
-    public Boolean getAccessControl() {
+    public String getAccessControl() {
         return accessControl;
     }
 
-    public void setAccessControl(Boolean accessControl) {
+    public void setAccessControl(String accessControl) {
         this.accessControl = accessControl;
     }
 
@@ -62,7 +64,14 @@ public class messageHelperClass {
                 ", otu='" + otu + '\'' ;
     }
 
-        /*
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    /*
         int isvalid=0 ;
         long timemilli = date.getTime();
         long time1 = 1604905537087L ;

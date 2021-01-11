@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="#F1FDF9"
-    tools:context=".MainActivity">
-
+    tools:context=".verifyPhoneno">
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
@@ -20,54 +17,54 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/firstregister_btn"
+        android:id="@+id/phoneverify_btn"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginVertical="12dp"
         android:layout_marginStart="88dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="123dp"
         android:layout_marginEnd="89dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="44dp"
         android:background="@drawable/roundbutton"
-        android:drawableEnd="@drawable/ic_fingerprint24"
         android:fontFamily="@font/convergence"
-        android:text="verification"
+        android:text="verify code"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homehint"
-        app:layout_constraintVertical_bias="0.234" />
+        app:layout_constraintTop_toBottomOf="@+id/editphone"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="365dp"
         android:layout_height="50dp"
         android:layout_marginStart="23dp"
-        android:layout_marginTop="131dp"
         android:layout_marginEnd="23dp"
         android:layout_marginBottom="200dp"
         android:fontFamily="@font/convergence"
-        android:text="Please use the one time username for login, click on the button below to request your unique one time username"
+        android:text="OTP has been sent to your number. Please verify"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homename"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.47" />
 
     <TextView
-        android:id="@+id/homehint"
+        android:id="@+id/presstext1"
         android:layout_width="365dp"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:layout_marginStart="114dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="115dp"
         android:layout_marginBottom="140dp"
         android:fontFamily="@font/convergence"
-        android:text="Use your fingerprint before requesting"
+        android:text=""
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,50 +92,14 @@
         app:layout_constraintVertical_bias="0.025" />
 
     <TextView
-        android:id="@+id/homeday"
-        android:layout_width="365dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="340dp"
-        android:fontFamily="@font/convergence"
-        android:text="Good Evening,"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/homename"
-        android:layout_width="365dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="23dp"
-        android:fontFamily="@font/convergence"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeday"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
         android:id="@+id/textView7"
         android:layout_width="365dp"
         android:layout_height="50dp"
         android:fontFamily="@font/convergence"
-        android:text="Welcome Back !"
+        android:text="Verification Code"
         android:textAlignment="center"
         android:textColor="#000000"
-        android:textSize="36sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.521"
@@ -155,9 +116,39 @@
         android:layout_marginEnd="146dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/profilepic" />
+        app:layout_constraintVertical_bias="0.09"
+        app:srcCompat="@drawable/sms1" />
 
-</androidx.constraintlayout.widget.ConstraintLayout >
+    <EditText
+        android:id="@+id/editcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="136dp"
+        android:ems="10"
+        android:hint="Enter OTP"
+        android:inputType="textPersonName"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.472"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/presstext"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/progressbackground"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/phonesend_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

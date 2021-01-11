@@ -15,6 +15,7 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import com.example.xinbank.Database.SessionManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,11 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
+    private String idfromsession,namefromsession, imeidevicefromsession;
     private TextView msgtxt, msgname;
     private Button loginbtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
         msgtxt = findViewById(R.id.homehint);
         msgname = findViewById(R.id.homename);
-        loginbtn = findViewById(R.id.login_btn);
+        loginbtn = findViewById(R.id.firstregister_btn);
         getusername();
+        msgname.setText(namefromsession);
+
         BiometricManager biometricManager = BiometricManager.from(this);
         switch(biometricManager.canAuthenticate()){
             case BiometricManager.BIOMETRIC_SUCCESS:
@@ -91,40 +97,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void getusername(){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkuser = reference.orderByChild("signinImei").equalTo("000000000000000");
-
-        checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String namefromdb = dataSnapshot.child("000000000000000").child("signinName").getValue(String.class);
-                    //String profilename = namefromdb;
-                    msgname.setText(namefromdb);
-//                    char profileicon = (char)profilename.toString().toUpperCase().charAt(0);
-//                    msgname.setText(profileicon);
-//                    msgprofile.setText(profileicon);
-                } else {
-                    msgname.setText("haven't register");
-                    opensignin();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-            }
-        });
-
+        SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> usersDetails = sessionManager.getUserDeatilFromSession();
+        namefromsession = usersDetails.get(SessionManager.KEY_USERNAME);
     }
     private void openAccessControl(){
-        Intent intent = new Intent(this,access_control.class);
+        Intent intent = new Intent(getApplicationContext(),access_control.class);
         startActivity(intent);
-        finish();
-    }
-    private void opensignin(){
-        Intent intentsignin = new Intent(this,signIn.class);
-        startActivity(intentsignin);
         finish();
     }
 }
