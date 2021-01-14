@@ -31,7 +31,7 @@ public class access_control extends AppCompatActivity {
     RadioButton acActivebtnn, acPassivebtnn;
     Button acRequestbtnn;
     String active;
-    String otname="" , result="", idfromsession,imeifromsession;
+    String otname="" , result="", idfrommain,imeifrommain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,10 @@ public class access_control extends AppCompatActivity {
         acActivebtnn = findViewById(R.id.acActivebtn);
         acPassivebtnn = findViewById(R.id.acPassivebtn);
         acRequestbtnn = findViewById(R.id.acRequestbtn);
-        getdatafromsession();
-        actextt.append(idfromsession);
+        idfrommain = getIntent().getStringExtra("id");
+        imeifrommain = getIntent().getStringExtra("deviceid");
+
+        actextt.append(idfrommain);
         acRequestbtnn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,12 +58,7 @@ public class access_control extends AppCompatActivity {
 
 
     }
-    public  void getdatafromsession(){
-        SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> usersDetails = sessionManager.getUserDeatilFromSession();
-        idfromsession = usersDetails.get(SessionManager.KEY_ID);
-        imeifromsession = usersDetails.get(SessionManager.KEY_IMEI);
-    }
+
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton)view).isChecked();
         String str="";
@@ -91,9 +88,9 @@ public class access_control extends AppCompatActivity {
         String otnametodata =sha.otuhashing(otname);
         helperClass.setOtu(otnametodata);
         helperClass.setAccessControl(active);
-        helperClass.setImei(imeifromsession);
+        helperClass.setImei(imeifrommain);
         helperClass.setTimestamp();
-        helperClass.setId(idfromsession);
+        helperClass.setId(idfrommain);
 
         myRef.child(otnametodata).setValue(helperClass, new DatabaseReference.CompletionListener() {
             @Override
@@ -110,6 +107,7 @@ public class access_control extends AppCompatActivity {
     private void openshowotu(){
         Intent intent = new Intent(getApplicationContext(),show_otu.class);
         intent.putExtra("otu", otname);
+        intent.putExtra("id", idfrommain);
         startActivity(intent);
         finish();
     }

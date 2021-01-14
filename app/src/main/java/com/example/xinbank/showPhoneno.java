@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.xinbank.Database.SessionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class showPhoneno extends AppCompatActivity {
@@ -30,7 +32,7 @@ public class showPhoneno extends AppCompatActivity {
     private EditText mobilenum;
     private Button send;
     private ProgressBar progressBar;
-    private String phone = "+6 018-258-3661";
+    private String phone;
     private FirebaseAuth auth;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallBacks;
     @Override
@@ -42,10 +44,10 @@ public class showPhoneno extends AppCompatActivity {
         mobilenum = findViewById(R.id.editphone);
         send = findViewById(R.id.phonesend_btn);
         progressBar= findViewById(R.id.progressBar);
+        getphoneFromsession();
         mobilenum.setText(phone);
 
         auth = FirebaseAuth.getInstance();
-
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +94,7 @@ public class showPhoneno extends AppCompatActivity {
                 Intent otpintent = new Intent(showPhoneno.this, verifyPhoneno.class);
                 otpintent.putExtra("auth", s);
                 startActivity(otpintent);
+                finish();
 /*
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -113,7 +116,7 @@ public class showPhoneno extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    sendtofirst();
+                    sendtoSETpw();
                 }else{
                     pressmsg.setText(task.getException().getMessage());
                     pressmsg.setTextColor(Color.RED);
@@ -122,10 +125,17 @@ public class showPhoneno extends AppCompatActivity {
             }
         });
     }
-    private void sendtofirst(){
-        Intent intent = new Intent(this, firstpage.class);
+    private void sendtoSETpw(){
+        Intent intent = new Intent(this, signinPassword.class);
         startActivity(intent);
+        finish();
 
+    }
+    private void getphoneFromsession() {
+        SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> usersDetails = sessionManager.getUserDeatilFromSession();
+
+        phone = usersDetails.get((SessionManager.KEY_PHONE));
     }
 
 }

@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 public class loginPassword extends AppCompatActivity {
-    private String idfromsession,namefromsession, pwfromdb,pwfromuser, otufromshowotu;
+    private String idfromshow, namefromdb, pwfromdb, pwfromuser, otufromshowotu;
     private TextView msg, setpw;
     private Button loginBTN;
     private String acontrolfromdb;
@@ -35,7 +35,6 @@ public class loginPassword extends AppCompatActivity {
         setpw = findViewById(R.id.Lsetpw);
         loginBTN = findViewById(R.id.Lnextbtn);
 
-        getdatafromsession();
         getotufromshowotu();
         getAControlFromDb();
         getpwfromdb();
@@ -44,64 +43,30 @@ public class loginPassword extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pwfromuser = setpw.getText().toString().trim();
-                if (pwfromuser.equals(pwfromdb)){
+                if (pwfromuser.equals(pwfromdb)) {
                     Toast.makeText(getApplicationContext(), "Password correct, Verified", Toast.LENGTH_SHORT).show();
                     getuserdata();
-                }else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Password wrong", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-    private void getdatafromsession(){
-        SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> usersDetails = sessionManager.getUserDeatilFromSession();
-        idfromsession = usersDetails.get(SessionManager.KEY_ID);
-        namefromsession = usersDetails.get(SessionManager.KEY_USERNAME);
-        msg.setText(namefromsession);
-    }
-    private void getpwfromdb(){
+
+    private void getpwfromdb() {
         DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Customers");
-        reference3.child(idfromsession).child("OnlineCust").addValueEventListener(new ValueEventListener() {
+        reference3.child(idfromshow).child("OnlineCust").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     pwfromdb = dataSnapshot.child("password").getValue(String.class);
+                    namefromdb = dataSnapshot.child("username").getValue(String.class);
                     msg.append(pwfromdb);
-                }
-                else{
+                } else {
                     Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
                 }
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "Database error", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    private void getuserdata(){
-        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Customers");
-        reference3.child(idfromsession).child("BankAccountCust").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    int accnumfromdb = dataSnapshot.child("accountnum").getValue(int.class);
-                    int accbalancefromdb = dataSnapshot.child("account_balance").getValue(int.class);
-                    String acctypefromdb = dataSnapshot.child("account_type").getValue(String.class);
-                    Intent intent = new Intent(getApplicationContext(),profile.class);
-                    intent.putExtra("id",idfromsession);
-                    intent.putExtra("name",namefromsession);
-                    intent.putExtra("accNum",accnumfromdb);
-                    intent.putExtra("accBalance",accbalancefromdb);
-                    intent.putExtra("accType",acctypefromdb);
-                    intent.putExtra("accessControl", acontrolfromdb);
-                    startActivity(intent);
-                    finish();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
-                }
-            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "Database error", Toast.LENGTH_SHORT).show();
@@ -109,7 +74,38 @@ public class loginPassword extends AppCompatActivity {
         });
     }
 
-    private void getAControlFromDb(){
+    private void getuserdata() {
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Customers");
+        reference3.child(idfromshow).child("BankAccountCust").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    int accnumfromdb = dataSnapshot.child("accountnum").getValue(int.class);
+                    int accbalancefromdb = dataSnapshot.child("account_balance").getValue(int.class);
+                    String acctypefromdb = dataSnapshot.child("account_type").getValue(String.class);
+                    createsession();
+                    Intent intent = new Intent(getApplicationContext(), profile.class);
+                    intent.putExtra("id", idfromshow);
+                    intent.putExtra("name", namefromdb);
+                    intent.putExtra("accNum", accnumfromdb);
+                    intent.putExtra("accBalance", accbalancefromdb);
+                    intent.putExtra("accType", acctypefromdb);
+                    intent.putExtra("accessControl", acontrolfromdb);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Database error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getAControlFromDb() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("message");
         Query checkuserotu = reference.orderByChild("otu").equalTo(otufromshowotu);
 
@@ -117,11 +113,12 @@ public class loginPassword extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    acontrolfromdb =  dataSnapshot.child(otufromshowotu).child("accessControl").getValue(String.class);
+                    acontrolfromdb = dataSnapshot.child(otufromshowotu).child("accessControl").getValue(String.class);
                 } else {
                     Toast.makeText(getApplicationContext(), "No data in access control", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.w("loadPost:onCancelled", databaseError.toException());
@@ -129,8 +126,14 @@ public class loginPassword extends AppCompatActivity {
             }
         });
     }
-    private void getotufromshowotu(){
+    private void createsession(){
+        SessionManager sessionManager = new SessionManager(loginPassword.this);
+        sessionManager.createLoginSession(idfromshow, namefromdb);
+    }
+
+    private void getotufromshowotu() {
         Intent intent = getIntent();
         otufromshowotu = intent.getStringExtra("otu");
+        idfromshow = intent.getStringExtra("id");
     }
 }

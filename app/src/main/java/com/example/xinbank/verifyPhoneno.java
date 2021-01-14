@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.xinbank.Database.SessionManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -64,7 +65,7 @@ public class verifyPhoneno extends AppCompatActivity {
                 if (task.isSuccessful()){
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(verifyPhoneno.this, "Success", Toast.LENGTH_SHORT).show();
-                    sendtofirst();
+                    sendtoSETpw();
                 }else{
                     progressBar.setVisibility(View.GONE);
                     pressmsg.setText(task.getException().getMessage());
@@ -76,8 +77,8 @@ public class verifyPhoneno extends AppCompatActivity {
         });
     }
 
-    private void sendtofirst() {
-        startActivity(new Intent(verifyPhoneno.this, firstpage.class));
+    private void sendtoSETpw() {
+        startActivity(new Intent(verifyPhoneno.this, signinPassword.class));
         finish();
     }
 }

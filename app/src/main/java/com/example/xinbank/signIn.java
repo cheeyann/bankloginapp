@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.xinbank.Database.SessionManager;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -83,17 +84,22 @@ public class signIn extends AppCompatActivity {
                                             final String bankcardvalidfromdb = dataSnapshot.child("account_card_validdate").getValue(String.class);
                                             final String bankcardcvvfromdb = dataSnapshot.child("account_card_cvv").getValue(String.class);
                                             //later change to pin
-                                            final String bankcardpinfromdb = dataSnapshot.child("account_type").getValue(String.class);
+                                            final String bankcardpinfromdb = dataSnapshot.child("account_card_pin").getValue(String.class);
                                             // check user enter info same with db
                                             if(ssid.equals(icfromdb) && ssname.equals(namefromdb) && sscard.equals(bankcardfromdb) && sscardvalid.equals(bankcardvalidfromdb) && sscardcvv.equals(bankcardcvvfromdb) && sscardpin.equals(bankcardpinfromdb) ){
                                                 //yes correct
                                                 Toast.makeText(getApplicationContext(), "All data correct, Verified", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(getApplicationContext(),signInSetname.class);
+                                                Intent intent = new Intent(getApplicationContext(),showPhoneno.class);
+                                                SessionManager sessionManager = new SessionManager(signIn.this);
+                                                sessionManager.createLoginSession(idfromdb, namefromdb, icfromdb, phonefromdb, phonefromdb);
+                                                /*
                                                 intent.putExtra("name",namefromdb);
                                                 intent.putExtra("id",idfromdb);
                                                 intent.putExtra("cardnum",bankcardfromdb);
                                                 intent.putExtra("ic",icfromdb);
                                                 intent.putExtra("phone",phonefromdb);
+
+                                                 */
                                                 startActivity(intent);
                                                 finish();
 

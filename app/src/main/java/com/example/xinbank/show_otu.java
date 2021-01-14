@@ -1,8 +1,10 @@
 package com.example.xinbank;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -25,7 +27,7 @@ public class show_otu extends AppCompatActivity {
     private TextView showotu;
     private static TextView showtime;
     private Button syesbtn, snobtn;
-    String user_otu, otufromaccesscontrol;
+    private String user_otu, otufromaccesscontrol, idfromac;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,7 @@ public class show_otu extends AppCompatActivity {
         showtime = findViewById(R.id.showotuCountdowntxt);
         syesbtn = findViewById(R.id.showyesbtn);
         snobtn = findViewById(R.id.shownobtn);
+        idfromac = getIntent().getStringExtra("id");
         showotu.setText(showotumethod());
         countdown.starttimer();
         syesbtn.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +50,7 @@ public class show_otu extends AppCompatActivity {
         snobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               onBackPressed();
             }
         });
     }
@@ -101,6 +105,7 @@ public class show_otu extends AppCompatActivity {
     private void openloginpassword(){
         Intent intent = new Intent(getApplicationContext(),loginPassword.class);
         intent.putExtra("otu",otufromaccesscontrol);
+        intent.putExtra("id", idfromac);
         startActivity(intent);
         finish();
     }
@@ -122,6 +127,30 @@ public class show_otu extends AppCompatActivity {
             countdowntimer.cancel();
         }
     }
+    public void onBackPressed(){
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        show_otu.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+
+    }
+    private void firstpage(){
+        startActivity(new Intent(this,firstpage.class));
+        finish();
+    }
+
 
 
 

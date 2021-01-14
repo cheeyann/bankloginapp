@@ -15,19 +15,16 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
-import com.example.xinbank.Database.SessionManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
-    private String idfromsession,namefromsession, imeidevicefromsession;
+    private String namefromdb, devideidfromdb, idfromfirst;
     private TextView msgtxt, msgname;
     private Button loginbtn;
 
@@ -38,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
         msgtxt = findViewById(R.id.homehint);
         msgname = findViewById(R.id.homename);
-        loginbtn = findViewById(R.id.firstregister_btn);
-        getusername();
-        msgname.setText(namefromsession);
+        loginbtn = findViewById(R.id.logouthomebtn);
+        idfromfirst = getIntent().getStringExtra("id");
+        checkDeviceexist();
 
         BiometricManager biometricManager = BiometricManager.from(this);
         switch(biometricManager.canAuthenticate()){
@@ -97,14 +94,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void getusername(){
-        SessionManager sessionManager = new SessionManager(this);
-        HashMap<String, String> usersDetails = sessionManager.getUserDeatilFromSession();
-        namefromsession = usersDetails.get(SessionManager.KEY_USERNAME);
+    private void checkDeviceexist() {
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Customers");
+        reference3.child(idfromfirst).child("OnlineCust").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    namefromdb = dataSnapshot.child("username").getValue(String.class);
+                    devideidfromdb = dataSnapshot.child("imei").getValue(String.class);
+                    msgname.setText(namefromdb);
+                } else {
+                    //online no user
+                    Toast.makeText(getApplicationContext(), "No this user online account", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("loadPost:onCancelled", databaseError.toException());
+                // bank acc db error
+                Toast.makeText(getApplicationContext(), "Database error in user online account", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+
     private void openAccessControl(){
         Intent intent = new Intent(getApplicationContext(),access_control.class);
+        intent.putExtra("id", idfromfirst);
+        intent.putExtra("deviceid", devideidfromdb);
         startActivity(intent);
         finish();
     }

@@ -17,6 +17,7 @@ public class SessionManager {
     public static final String KEY_USERNAME = "username";
     public static final String KEY_IC = "ic";
     public static final String KEY_IMEI = "imei";
+    public static final String KEY_PHONE = "phone";
 
     public SessionManager(Context _context) {
         context = _context;
@@ -24,7 +25,7 @@ public class SessionManager {
         editor = userSession.edit();
     }
 
-    public void createLoginSession(String id, String username, String ic, String imei) {
+    public void createLoginSession(String id, String username, String ic, String imei, String phone) {
 
         editor.putBoolean(IS_LOGIN, true);
 
@@ -32,6 +33,16 @@ public class SessionManager {
         editor.putString(KEY_USERNAME, username);
         editor.putString(KEY_IC, ic);
         editor.putString(KEY_IMEI, imei);
+        editor.putString(KEY_PHONE, phone);
+
+        editor.commit();
+    }
+    public void createLoginSession(String id, String username) {
+
+        editor.putBoolean(IS_LOGIN, true);
+
+        editor.putString(KEY_ID, id);
+        editor.putString(KEY_USERNAME, username);
 
         editor.commit();
     }
@@ -43,6 +54,7 @@ public class SessionManager {
         userData.put(KEY_USERNAME, userSession.getString(KEY_USERNAME, null));
         userData.put(KEY_IC, userSession.getString(KEY_IC, null));
         userData.put(KEY_IMEI, userSession.getString(KEY_IMEI, null));
+        userData.put(KEY_PHONE, userSession.getString(KEY_PHONE, null));
 
         return userData;
     }

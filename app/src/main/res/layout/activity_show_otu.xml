@@ -19,12 +19,12 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="110dp"
+        android:layout_width="130dp"
         android:layout_height="35dp"
         android:layout_marginStart="136dp"
         android:layout_marginEnd="136dp"
         android:fontFamily="@font/convergence"
-        android:text="- BANK -"
+        android:text="- UBANK -"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -52,7 +52,7 @@
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/logoutsTIME"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="176dp"
@@ -80,7 +80,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/logoutsTIME"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -88,15 +88,16 @@
         android:layout_width="145dp"
         android:layout_height="140dp"
         android:layout_marginTop="37dp"
-        android:layout_marginEnd="52dp"
         android:layout_marginBottom="270dp"
         android:background="@drawable/btn_nologin"
         android:fontFamily="@font/convergence"
-        android:text="NO,  i will login at other site"
+        android:text="NO, exit"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.793"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintVertical_bias="0.032" />
 
@@ -104,7 +105,6 @@
         android:id="@+id/showyesbtn"
         android:layout_width="145dp"
         android:layout_height="140dp"
-        android:layout_marginStart="56dp"
         android:layout_marginTop="37dp"
         android:layout_marginBottom="270dp"
         android:background="@drawable/btn_yeslogin"
@@ -113,6 +113,8 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.206"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintVertical_bias="0.032" />
@@ -126,7 +128,7 @@
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="355dp"
         android:fontFamily="@font/convergence"
-        android:text="Login here using this app ? "
+        android:text="Login? "
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -153,7 +155,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/logoutsTIME"
         app:layout_constraintVertical_bias="0.013" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

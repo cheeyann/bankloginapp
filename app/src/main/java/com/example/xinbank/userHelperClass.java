@@ -10,21 +10,22 @@ public class userHelperClass {
     private String password;
     private String IMEI;
     private Long timestamp;
-    private Boolean is_login;
+    private String deviceName;
     private String card_num;
     private String onlinecustomer_id;
 
     public userHelperClass() {
     }
 
-    public userHelperClass(String username, String password, String IMEI, Long timestamp, Boolean is_login, String card_num, String onlinecustomer_id) {
+    public userHelperClass(String username, String password, String IMEI, Long timestamp, String deviceName, String card_num, String onlinecustomer_id) {
         this.username = username;
         this.password = password;
         this.IMEI = IMEI;
         this.timestamp = timestamp;
-        this.is_login = is_login;
+        this.deviceName = deviceName;
         this.card_num = card_num;
         this.onlinecustomer_id = onlinecustomer_id;
+
     }
 
     private void generateTimestamp() {
@@ -63,13 +64,12 @@ public class userHelperClass {
         generateTimestamp();
     }
 
-    public Boolean getIs_login() {
-        return is_login;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setIs_login(Boolean is_login) {
-        this.is_login = is_login;
-    }
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;}
 
     public String getCard_num() {
         return card_num;
@@ -86,4 +86,7 @@ public class userHelperClass {
     public void setOnlinecustomer_id(String onlinecustomer_id) {
         this.onlinecustomer_id = onlinecustomer_id;
     }
+
+
+
 }

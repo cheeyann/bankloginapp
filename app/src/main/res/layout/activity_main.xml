@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/firstregister_btn"
+        android:id="@+id/logouthomebtn"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_marginVertical="12dp"
@@ -41,11 +41,9 @@
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginStart="23dp"
         android:layout_marginTop="131dp"
-        android:layout_marginEnd="23dp"
         android:layout_marginBottom="200dp"
         android:fontFamily="@font/convergence"
         android:text="Please use the one time username for login, click on the button below to request your unique one time username"
@@ -53,38 +51,36 @@
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homename"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/homehint"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="60dp"
-        android:layout_marginStart="114dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="115dp"
         android:layout_marginBottom="140dp"
         android:fontFamily="@font/convergence"
         android:text="Use your fingerprint before requesting"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#000000"
+        android:textColor="#373737"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="110dp"
+        android:layout_width="130dp"
         android:layout_height="35dp"
         android:layout_marginStart="136dp"
         android:layout_marginEnd="136dp"
         android:fontFamily="@font/convergence"
-        android:text="- BANK -"
+        android:text="- UBANK -"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -96,11 +92,9 @@
 
     <TextView
         android:id="@+id/homeday"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
         android:layout_marginBottom="340dp"
         android:fontFamily="@font/convergence"
         android:text="Good Evening,"
@@ -109,30 +103,26 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
         android:id="@+id/homename"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="35dp"
-        android:layout_marginStart="23dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="23dp"
         android:fontFamily="@font/convergence"
-        android:textColor="#000000"
+        android:textColor="#0A8E6B"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeday"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:fontFamily="@font/convergence"
         android:text="Welcome Back !"

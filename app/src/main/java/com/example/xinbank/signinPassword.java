@@ -2,10 +2,14 @@ package com.example.xinbank;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,10 +24,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class signinPassword extends AppCompatActivity {
     private TextView msg, setpw, setpw2;
     private Button nextBTN;
-    String namefromsigninset, idfromsigninset, icardnumromsigninset, usernamefromset, imeifromset, icfromsigninset;
+    private String idFromsession, deviceid, nameFromsession, icFromsession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +39,9 @@ public class signinPassword extends AppCompatActivity {
         setpw = findViewById(R.id.Ssetpw);
         setpw2 = findViewById(R.id.Ssetpw2);
         nextBTN = findViewById(R.id.Snextbtn);
-        showfullname();
+        getdataFromsession();
+        msg.setText(nameFromsession);
+        getdeviceid();
         nextBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,92 +50,57 @@ public class signinPassword extends AppCompatActivity {
         });
     }
 
-    private void openfirst() {
-        Intent intent = new Intent(this, firstpage.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void showfullname() {
-        Intent intent = getIntent();
-        namefromsigninset = intent.getStringExtra("name");
-        idfromsigninset = intent.getStringExtra("id");
-        icardnumromsigninset = intent.getStringExtra("cardnum");
-        usernamefromset = intent.getStringExtra("username");
-        imeifromset = intent.getStringExtra("imei");
-        icfromsigninset = intent.getStringExtra("ic");
-        msg.setText(namefromsigninset);
-    }
-
     private void setnamenpwtoDB() {
         String pw1 = setpw.getText().toString().trim();
         String pw2 = setpw2.getText().toString().trim();
-        if (isEqual(pw1, pw2)) {
-            //equal
-            //save to db
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            final DatabaseReference myRef = database.getReference("Customers");
+        if ((!pw1.isEmpty()) && (!pw2.isEmpty()) ) {
+            if (isEqual(pw1, pw2)) {
+                //equal
+                //save to db
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                final DatabaseReference myRef = database.getReference("Customers");
 
-            final userHelperClass helperClass = new userHelperClass();
-            helperClass.setIMEI(imeifromset);
-            helperClass.setCard_num(icardnumromsigninset);
-            helperClass.setIs_login(false);
-            helperClass.setOnlinecustomer_id(idfromsigninset);
-            helperClass.setPassword(pw2);
-            helperClass.setTimestamp();
-            helperClass.setUsername(usernamefromset);
+                final userHelperClass helperClass = new userHelperClass();
+                helperClass.setIMEI(deviceid);
+                helperClass.setDeviceName(getDevice());
+                helperClass.setOnlinecustomer_id(idFromsession);
+                helperClass.setPassword(pw2);
+                helperClass.setTimestamp();
+                helperClass.setUsername(nameFromsession);
 
-            //check ic is exist in imei exist and set imei to imeiexist
-            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("imeiExist");
-            Query checkuser = reference.orderByChild("ic").equalTo(icfromsigninset);
-            checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        reference.child(icfromsigninset).child("imei").setValue(imeifromset, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                if (databaseError != null) {
-                                    Toast.makeText(getApplicationContext(), "Data could not be saved in imeiexist" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //imei saved in imei exist
-                                    //save online cust
-                                    myRef.child(idfromsigninset).child("OnlineCust").setValue(helperClass, new DatabaseReference.CompletionListener() {
-                                        @Override
-                                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                            if (databaseError != null) {
-                                                Toast.makeText(getApplicationContext(), "Data could not be saved" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                //online cust saved
-                                                Toast.makeText(getApplicationContext(), "Register success", Toast.LENGTH_SHORT).show();
-                                                //saved data to session and to fisrtpage to login
-                                                SessionManager sessionManager = new SessionManager(signinPassword.this);
-                                                sessionManager.createLoginSession(idfromsigninset, usernamefromset, icfromsigninset, imeifromset);
-                                                openfirst();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
+                //check ic is exist in imei exist and set imei to imeiexist
 
-                    } else {
-                        //ic not exist in imei exist
-                        Toast.makeText(getApplicationContext(), "IC not exist in imei exist", Toast.LENGTH_SHORT).show();
+                myRef.child(idFromsession).child("OnlineCust").setValue(helperClass, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Toast.makeText(getApplicationContext(), "Data could not be saved" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            //online cust saved
+                            //create device exist
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference Ref = database.getReference("DeviceExists");
+                            DeviceExist deviceExist = new DeviceExist(deviceid,idFromsession);
+                            Ref.child(deviceid).setValue(deviceExist, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                    if (databaseError != null) {
+                                        Toast.makeText(getApplicationContext(), "Data could not be saved in deviceExist" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_SHORT).show();
+                                        tofirst();
+                                    }}
+                            });
+                            //saved user data to session and to fisrtpage to login
+                        }
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.w("loadPost:onCancelled", databaseError.toException());
-                    Toast.makeText(getApplicationContext(), "Database error in imeiexists", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-        } else {
-            //not equal
-            Toast.makeText(getApplicationContext(), "Password not equal", Toast.LENGTH_SHORT).show();
+                });
+            } else {
+                //not equal
+                Toast.makeText(getApplicationContext(), "Password not equal", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(getApplicationContext(), "Please enter password", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -137,5 +110,71 @@ public class signinPassword extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+    private void getdataFromsession() {
+        SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> usersDetails = sessionManager.getUserDeatilFromSession();
+
+        idFromsession = usersDetails.get((SessionManager.KEY_ID));
+        nameFromsession = usersDetails.get((SessionManager.KEY_USERNAME));
+        icFromsession = usersDetails.get((SessionManager.KEY_IC));
+    }
+    private void logout() {
+        SessionManager sessionManager = new SessionManager(this);
+        sessionManager.logoutUserFromSession();
+    }
+    private void getdeviceid() {
+        deviceid = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+    public void onBackPressed(){
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to exit?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        signinPassword.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        tofirst();
+                    }
+                })
+                .show();
+
+    }
+    private void tofirst(){
+        new AlertDialog.Builder(this)
+                .setMessage("Do you want to login now?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logout();
+                        firstpage();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logout();
+                        dialog.cancel();
+                        onBackPressed();
+                    }
+                })
+                .show();
+
+    }
+    private void firstpage(){
+        startActivity(new Intent(this,firstpage.class));
+        finish();
+    }
+
+    private static String getDevice() {
+        String infomation = Build.MANUFACTURER + " " + Build.MODEL ;
+        return infomation;
     }
 }

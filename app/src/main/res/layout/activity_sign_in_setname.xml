@@ -18,12 +18,12 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="110dp"
+        android:layout_width="130dp"
         android:layout_height="35dp"
         android:layout_marginStart="136dp"
         android:layout_marginEnd="136dp"
         android:fontFamily="@font/convergence"
-        android:text="- BANK -"
+        android:text="- UBANK -"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="17dp"
@@ -69,7 +69,7 @@
 
     <TextView
         android:id="@+id/textViewName"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
@@ -77,7 +77,7 @@
         android:fontFamily="@font/convergence"
         android:text=" "
         android:textAlignment="center"
-        android:textColor="#000000"
+        android:textColor="#0A8E6B"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +87,7 @@
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="365dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
