@@ -26,9 +26,7 @@ public class firstpage extends AppCompatActivity {
     private Button fsigninbtn, floginbtn;
     private TextView msgtxt, msgRegister;
     private String device_id, userid;
-    private Build build;
-    private Build.VERSION version;
-    private String infomation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,6 @@ public class firstpage extends AppCompatActivity {
 
         getdeviceid();
         checkDeviceexist();
-        msgtxt.append("\n" + device_id);
         fsigninbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

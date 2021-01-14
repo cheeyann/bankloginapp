@@ -1,5 +1,6 @@
 package com.example.xinbank;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,10 +13,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xinbank.Database.SessionManager;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class profile extends AppCompatActivity {
-    private String idfromlpw,namefromlpw,acctypefromlpw, accessControlfromlpw;
-    private int accnumfromlpw,accbalancefromlpw;
+    private String accnumfromdb,acctypefromdb;
+    private String idfromsession, accontrolfromsession, namefromdb;
+    private int accbalancefromdb;
     private TextView paccnum, paccbalance, pname,pacctype;
     private Button logoutBTN, tranferbtn;
     @Override
@@ -30,8 +39,12 @@ public class profile extends AppCompatActivity {
         logoutBTN = findViewById(R.id.fingerverify_btn);
         tranferbtn = findViewById(R.id.buttontransfer);
 
-        getdatafromloginpw();
-        if(accessControlfromlpw.equals("false")){
+        getidFromsession();
+        getusernamefromdb();
+        getuserbankaccfromdb();
+        settext();
+
+        if(accontrolfromsession.equals("false")){
             tranferbtn.setVisibility(View.GONE);
         }
 
@@ -42,19 +55,50 @@ public class profile extends AppCompatActivity {
             }
         });
     }
-    private void getdatafromloginpw(){
-        Intent intent = getIntent();
-        idfromlpw = intent.getStringExtra("id");
-        namefromlpw = intent.getStringExtra("name");
-        accnumfromlpw = intent.getIntExtra("accNum",0);
-        accbalancefromlpw = intent.getIntExtra("accBalance",0);
-        acctypefromlpw = intent.getStringExtra("accType");
-        accessControlfromlpw = intent.getStringExtra("accessControl");
+    private void getuserbankaccfromdb() {
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Customers");
+        reference3.child(idfromsession).child("BankAccountCust").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    accnumfromdb = dataSnapshot.child("accountnum").getValue(String.class);
+                    accbalancefromdb = dataSnapshot.child("account_balance").getValue(int.class);
+                    acctypefromdb = dataSnapshot.child("account_type").getValue(String.class);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        pacctype.append(" "+ acctypefromlpw);
-        paccnum.setText(String.valueOf(accnumfromlpw));
-        paccbalance.setText("RM "+ String.valueOf(accbalancefromlpw));
-        pname.setText(namefromlpw);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Database error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void getusernamefromdb() {
+        DatabaseReference reference3 = FirebaseDatabase.getInstance().getReference("Customers");
+        reference3.child(idfromsession).child("OnlineCust").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    namefromdb = dataSnapshot.child("username").getValue(String.class);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Database error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void settext(){
+        pacctype.append(" "+ acctypefromdb);
+        paccnum.setText(String.valueOf(accnumfromdb));
+        paccbalance.setText("RM "+ String.valueOf(accbalancefromdb));
+        pname.setText(namefromdb);
     }
     public void onBackPressed(){
         new AlertDialog.Builder(this)
@@ -83,5 +127,13 @@ public class profile extends AppCompatActivity {
     private void logout() {
         SessionManager sessionManager = new SessionManager(this);
         sessionManager.logoutUserFromSession();
+    }
+
+    private void getidFromsession() {
+        SessionManager sessionManager = new SessionManager(this);
+        HashMap<String, String> usersDetails = sessionManager.getUserDeatilFromSession();
+
+        idfromsession = usersDetails.get(SessionManager.KEY_ID);
+        accontrolfromsession = usersDetails.get(SessionManager.KEY_ACCONTROL);
     }
 }

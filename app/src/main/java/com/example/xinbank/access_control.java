@@ -108,6 +108,7 @@ public class access_control extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),show_otu.class);
         intent.putExtra("otu", otname);
         intent.putExtra("id", idfrommain);
+        intent.putExtra("acControl", active);
         startActivity(intent);
         finish();
     }

@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".FailToAccess"></activity>
+        <activity android:name=".afterSetPassword"></activity>
+        <activity android:name=".FailToAccess" />
         <activity android:name=".AfterPassword" />
         <activity android:name=".ChoosePassword" />
         <activity android:name=".UploadPasswords" />
@@ -23,17 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity android:name=".firstpage"/>
-
+        <activity android:name=".firstpage" />
         <activity android:name=".logoutSuccess" />
         <activity android:name=".verifyPhoneno" />
         <activity android:name=".showPhoneno" />
         <activity android:name=".profile" />
         <activity android:name=".signInSetname" />
         <activity android:name=".fingerPrintcheck" />
-
         <activity android:name=".loginPassword" />
         <activity android:name=".signinPassword" />
         <activity android:name=".signIn" />

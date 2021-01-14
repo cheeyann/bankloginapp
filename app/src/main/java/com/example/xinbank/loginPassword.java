@@ -83,7 +83,6 @@ public class loginPassword extends AppCompatActivity {
                     int accnumfromdb = dataSnapshot.child("accountnum").getValue(int.class);
                     int accbalancefromdb = dataSnapshot.child("account_balance").getValue(int.class);
                     String acctypefromdb = dataSnapshot.child("account_type").getValue(String.class);
-                    createsession();
                     Intent intent = new Intent(getApplicationContext(), profile.class);
                     intent.putExtra("id", idfromshow);
                     intent.putExtra("name", namefromdb);
@@ -125,10 +124,6 @@ public class loginPassword extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Database error in access control", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-    private void createsession(){
-        SessionManager sessionManager = new SessionManager(loginPassword.this);
-        sessionManager.createLoginSession(idfromshow, namefromdb);
     }
 
     private void getotufromshowotu() {

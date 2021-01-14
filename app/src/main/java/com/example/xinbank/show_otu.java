@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.xinbank.Database.SessionManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,13 +22,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
-import java.util.Random;
 
 public class show_otu extends AppCompatActivity {
     private TextView showotu;
     private static TextView showtime;
     private Button syesbtn, snobtn;
-    private String user_otu, otufromaccesscontrol, idfromac;
+    private String user_otu, otufromaccesscontrol, idfromac, accontrolfromac;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +35,10 @@ public class show_otu extends AppCompatActivity {
 
         showotu = findViewById(R.id.showotutext);
         showtime = findViewById(R.id.showotuCountdowntxt);
-        syesbtn = findViewById(R.id.showyesbtn);
-        snobtn = findViewById(R.id.shownobtn);
+        syesbtn = findViewById(R.id.asetpwlogin);
+        snobtn = findViewById(R.id.asetpwexit);
         idfromac = getIntent().getStringExtra("id");
+        accontrolfromac = getIntent().getStringExtra("acControl");
         showotu.setText(showotumethod());
         countdown.starttimer();
         syesbtn.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +82,7 @@ public class show_otu extends AppCompatActivity {
                     if(witnin5minute(timefromdb)){
                         Toast.makeText(getApplicationContext(), "success, verify, within 30 sec", Toast.LENGTH_SHORT).show();
                         countdown.canceltimer();
+                        createsession();
                         openloginpassword();
                     }else{
                         Toast.makeText(getApplicationContext(), "otu expired, more than 30 sec", Toast.LENGTH_SHORT).show();
@@ -108,6 +110,10 @@ public class show_otu extends AppCompatActivity {
         intent.putExtra("id", idfromac);
         startActivity(intent);
         finish();
+    }
+    private void createsession(){
+        SessionManager sessionManager = new SessionManager(show_otu.this);
+        sessionManager.createLoginSession(idfromac, accontrolfromac);
     }
 
     private static class countdown {

@@ -18,6 +18,7 @@ public class SessionManager {
     public static final String KEY_IC = "ic";
     public static final String KEY_IMEI = "imei";
     public static final String KEY_PHONE = "phone";
+    public static final String KEY_ACCONTROL = "accesscontrol";
 
     public SessionManager(Context _context) {
         context = _context;
@@ -37,12 +38,13 @@ public class SessionManager {
 
         editor.commit();
     }
-    public void createLoginSession(String id, String username) {
+    //used in show otu
+    public void createLoginSession(String id, String accesscontrol) {
 
         editor.putBoolean(IS_LOGIN, true);
 
         editor.putString(KEY_ID, id);
-        editor.putString(KEY_USERNAME, username);
+        editor.putString(KEY_ACCONTROL, accesscontrol);
 
         editor.commit();
     }

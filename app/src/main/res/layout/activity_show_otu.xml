@@ -84,7 +84,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/shownobtn"
+        android:id="@+id/asetpwexit"
         android:layout_width="145dp"
         android:layout_height="140dp"
         android:layout_marginTop="37dp"
@@ -102,7 +102,7 @@
         app:layout_constraintVertical_bias="0.032" />
 
     <Button
-        android:id="@+id/showyesbtn"
+        android:id="@+id/asetpwlogin"
         android:layout_width="145dp"
         android:layout_height="140dp"
         android:layout_marginTop="37dp"
