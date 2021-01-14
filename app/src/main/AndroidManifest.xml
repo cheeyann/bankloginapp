@@ -16,14 +16,15 @@
         <activity android:name=".AfterPassword" />
         <activity android:name=".ChoosePassword" />
         <activity android:name=".UploadPasswords" />
-        <activity android:name=".ymain"/>
-        <activity android:name=".firstpage">
+        <activity android:name=".ymain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".firstpage"/>
+
         <activity android:name=".logoutSuccess" />
         <activity android:name=".verifyPhoneno" />
         <activity android:name=".showPhoneno" />

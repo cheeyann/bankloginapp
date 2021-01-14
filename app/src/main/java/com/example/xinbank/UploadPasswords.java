@@ -104,7 +104,7 @@ public class UploadPasswords extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (UploadPasswords.this, MainActivity.class);
+                Intent intent = new Intent (UploadPasswords.this, ymain.class);
                 startActivity(intent);
             }
         });
