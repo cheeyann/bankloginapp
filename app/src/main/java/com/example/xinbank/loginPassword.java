@@ -83,6 +83,7 @@ public class loginPassword extends AppCompatActivity {
                     int accnumfromdb = dataSnapshot.child("accountnum").getValue(int.class);
                     int accbalancefromdb = dataSnapshot.child("account_balance").getValue(int.class);
                     String acctypefromdb = dataSnapshot.child("account_type").getValue(String.class);
+                    /*
                     Intent intent = new Intent(getApplicationContext(), profile.class);
                     intent.putExtra("id", idfromshow);
                     intent.putExtra("name", namefromdb);
@@ -92,6 +93,7 @@ public class loginPassword extends AppCompatActivity {
                     intent.putExtra("accessControl", acontrolfromdb);
                     startActivity(intent);
                     finish();
+                    */
                 } else {
                     Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
                 }

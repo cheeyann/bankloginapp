@@ -78,7 +78,7 @@ public class verifyPhoneno extends AppCompatActivity {
     }
 
     private void sendtoSETpw() {
-        startActivity(new Intent(verifyPhoneno.this, signinPassword.class));
+        startActivity(new Intent(verifyPhoneno.this, ymain.class));
         finish();
     }
 }

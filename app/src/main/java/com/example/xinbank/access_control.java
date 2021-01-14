@@ -44,7 +44,6 @@ public class access_control extends AppCompatActivity {
         idfrommain = getIntent().getStringExtra("id");
         imeifrommain = getIntent().getStringExtra("deviceid");
 
-        actextt.append(idfrommain);
         acRequestbtnn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

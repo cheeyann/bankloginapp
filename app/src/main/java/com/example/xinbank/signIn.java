@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class signIn extends AppCompatActivity {
     private TextView sname, sid, scard, scardvalid, scardcvv, scardpin;
     private Button signinBTN;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +38,12 @@ public class signIn extends AppCompatActivity {
         scardcvv = findViewById(R.id.signinCardCVV);
         scardpin = findViewById(R.id.editTextNumberPassword);
         signinBTN = findViewById(R.id.signinbtn);
+        progressBar= findViewById(R.id.progressBar);
 
         signinBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 signin();
             }
         });
@@ -88,10 +92,11 @@ public class signIn extends AppCompatActivity {
                                             // check user enter info same with db
                                             if(ssid.equals(icfromdb) && ssname.equals(namefromdb) && sscard.equals(bankcardfromdb) && sscardvalid.equals(bankcardvalidfromdb) && sscardcvv.equals(bankcardcvvfromdb) && sscardpin.equals(bankcardpinfromdb) ){
                                                 //yes correct
+                                                progressBar.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "All data correct, Verified", Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(getApplicationContext(),showPhoneno.class);
                                                 SessionManager sessionManager = new SessionManager(signIn.this);
-                                                sessionManager.createLoginSession(idfromdb, namefromdb, icfromdb, phonefromdb, phonefromdb);
+                                                sessionManager.createLoginSession(idfromdb, namefromdb, icfromdb, phonefromdb, phonefromdb,"null");
                                                 /*
                                                 intent.putExtra("name",namefromdb);
                                                 intent.putExtra("id",idfromdb);
@@ -105,10 +110,12 @@ public class signIn extends AppCompatActivity {
 
                                             }else{
                                                 //wrong
+                                                progressBar.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Data enter wrongly", Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
                                             //bank acc no user
+                                            progressBar.setVisibility(View.GONE);
                                             Toast.makeText(getApplicationContext(), "No this user bank account", Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -116,11 +123,13 @@ public class signIn extends AppCompatActivity {
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
                                         Log.w("loadPost:onCancelled", databaseError.toException());
                                         // bank acc db error
+                                        progressBar.setVisibility(View.GONE);
                                         Toast.makeText(getApplicationContext(), "Database error in user bank account", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } else {
                                 //no user in cus
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(getApplicationContext(), "No this user account", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -128,11 +137,13 @@ public class signIn extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             Log.w("loadPost:onCancelled", databaseError.toException());
                             //db error in cus
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(getApplicationContext(), "Database error in user account", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
                     //no user in db
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), "No this user", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -140,6 +151,7 @@ public class signIn extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.w("loadPost:onCancelled", databaseError.toException());
                 //db error
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Database error", Toast.LENGTH_SHORT).show();
             }
         });

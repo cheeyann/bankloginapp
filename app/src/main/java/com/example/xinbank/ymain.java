@@ -79,6 +79,7 @@ public class ymain extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ymain.this, UploadPasswords.class);
                 startActivity(intent);
+                finish();
             }
         });
 

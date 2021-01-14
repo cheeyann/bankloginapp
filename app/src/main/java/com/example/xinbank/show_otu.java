@@ -105,7 +105,7 @@ public class show_otu extends AppCompatActivity {
         return user_otu;
     }
     private void openloginpassword(){
-        Intent intent = new Intent(getApplicationContext(),loginPassword.class);
+        Intent intent = new Intent(getApplicationContext(),ChoosePassword.class);
         intent.putExtra("otu",otufromaccesscontrol);
         intent.putExtra("id", idfromac);
         startActivity(intent);
@@ -113,7 +113,7 @@ public class show_otu extends AppCompatActivity {
     }
     private void createsession(){
         SessionManager sessionManager = new SessionManager(show_otu.this);
-        sessionManager.createLoginSession(idfromac, accontrolfromac);
+        sessionManager.createLoginSession(idfromac,"null", "null", "null", "null", accontrolfromac);
     }
 
     private static class countdown {

@@ -26,7 +26,7 @@ public class SessionManager {
         editor = userSession.edit();
     }
 
-    public void createLoginSession(String id, String username, String ic, String imei, String phone) {
+    public void createLoginSession(String id, String username, String ic, String imei, String phone, String accesscontrol) {
 
         editor.putBoolean(IS_LOGIN, true);
 
@@ -35,10 +35,12 @@ public class SessionManager {
         editor.putString(KEY_IC, ic);
         editor.putString(KEY_IMEI, imei);
         editor.putString(KEY_PHONE, phone);
+        editor.putString(KEY_ACCONTROL, accesscontrol);
 
         editor.commit();
     }
     //used in show otu
+    /*
     public void createLoginSession(String id, String accesscontrol) {
 
         editor.putBoolean(IS_LOGIN, true);
@@ -49,6 +51,8 @@ public class SessionManager {
         editor.commit();
     }
 
+     */
+
     public HashMap<String, String> getUserDeatilFromSession() {
         HashMap<String, String> userData = new HashMap<String, String>();
 
@@ -57,6 +61,8 @@ public class SessionManager {
         userData.put(KEY_IC, userSession.getString(KEY_IC, null));
         userData.put(KEY_IMEI, userSession.getString(KEY_IMEI, null));
         userData.put(KEY_PHONE, userSession.getString(KEY_PHONE, null));
+        userData.put(KEY_ACCONTROL, userSession.getString(KEY_ACCONTROL, null));
+
 
         return userData;
     }

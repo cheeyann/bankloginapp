@@ -42,9 +42,9 @@ public class profile extends AppCompatActivity {
         getidFromsession();
         getusernamefromdb();
         getuserbankaccfromdb();
-        settext();
+        String ac = "false";
 
-        if(accontrolfromsession.equals("false")){
+        if(accontrolfromsession.equals(ac)) {
             tranferbtn.setVisibility(View.GONE);
         }
 
@@ -64,6 +64,9 @@ public class profile extends AppCompatActivity {
                     accnumfromdb = dataSnapshot.child("accountnum").getValue(String.class);
                     accbalancefromdb = dataSnapshot.child("account_balance").getValue(int.class);
                     acctypefromdb = dataSnapshot.child("account_type").getValue(String.class);
+                    pacctype.append(" "+ acctypefromdb);
+                    paccnum.setText(String.valueOf(accnumfromdb));
+                    paccbalance.setText("RM "+ String.valueOf(accbalancefromdb));
                 } else {
                     Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
                 }
@@ -82,6 +85,7 @@ public class profile extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     namefromdb = dataSnapshot.child("username").getValue(String.class);
+                    pname.setText(namefromdb);
                 } else {
                     Toast.makeText(getApplicationContext(), "No data", Toast.LENGTH_SHORT).show();
                 }
@@ -94,12 +98,6 @@ public class profile extends AppCompatActivity {
         });
     }
 
-    private void settext(){
-        pacctype.append(" "+ acctypefromdb);
-        paccnum.setText(String.valueOf(accnumfromdb));
-        paccbalance.setText("RM "+ String.valueOf(accbalancefromdb));
-        pname.setText(namefromdb);
-    }
     public void onBackPressed(){
         new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to logout?")

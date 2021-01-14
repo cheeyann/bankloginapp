@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class firstpage extends AppCompatActivity {
     private Button fsigninbtn, floginbtn;
     private TextView msgtxt, msgRegister;
     private String device_id, userid;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -36,7 +38,9 @@ public class firstpage extends AppCompatActivity {
         msgRegister = findViewById(R.id.msgregister);
         fsigninbtn = findViewById(R.id.logouthomebtn);
         floginbtn = findViewById(R.id.firstlogin_btn);
+        progressBar = findViewById(R.id.progressBar);
 
+        progressBar.setVisibility(View.VISIBLE);
         getdeviceid();
         checkDeviceexist();
         fsigninbtn.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +68,7 @@ public class firstpage extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     userid = dataSnapshot.child(device_id).child("id").getValue(String.class);
-                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                     msgtxt.setText("Registered, please click LOGIN button to proceed.");
                     //check database
                     fsigninbtn.setVisibility(View.GONE);
@@ -73,6 +77,7 @@ public class firstpage extends AppCompatActivity {
                     String msgg = "We will use this device to identify you, if your phone were lost or you want to " +
                             "change to new phone, please remove your online bank account from the old device via our website";
                     msgRegister.setText(msgg);
+                    progressBar.setVisibility(View.GONE);
                     floginbtn.setVisibility(View.GONE);
                 }
             }
