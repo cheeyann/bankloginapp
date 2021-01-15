@@ -39,7 +39,7 @@ public class UploadPictureForPassword extends RecyclerView.Adapter<UploadPicture
             holder.fileDoneView.setImageResource(R.drawable.loading_icon2);
         }
         else{
-            holder.fileDoneView.setImageResource(R.drawable.checked_icon);
+            holder.fileDoneView.setImageResource(R.drawable.check_circle);
         }
     }
 
