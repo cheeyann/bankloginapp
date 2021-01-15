@@ -77,38 +77,15 @@ public class ymain extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ymain.this, UploadPasswords.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        /*showImage = findViewById(R.id.imageView);
-        showImage.setHasFixedSize(true);
-        showImage.setLayoutManager(new LinearLayoutManager(this));
-        DividerItemDecoration deco = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        showImage.addItemDecoration(deco);
-        imageList = new ArrayList<>();
-        myRef = FirebaseDatabase.getInstance().getReference("Images");
-        getImageData();*/
-    }
-
-    /*private void getImageData() {
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot di:dataSnapshot.getChildren()){
-                    ShowImage showImageList = di.getValue(ShowImage.class);
-                    imageList.add(showImageList);
+                if (fileDoneList.size() > 3) {
+                    Intent intent = new Intent(ymain.this, UploadPasswords.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(ymain.this, "Please upload at least 4 photos.", Toast.LENGTH_SHORT).show();
                 }
-                imageAdapter adapter = new imageAdapter(imageList, getApplicationContext());
-                showImage.setAdapter(adapter);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }*/
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -119,69 +96,56 @@ public class ymain extends AppCompatActivity {
 
             if(data.getClipData() != null){
                 int totalItemSelected = data.getClipData().getItemCount();
+                if (totalItemSelected > 3){
 
-                for(int i=0; i<totalItemSelected; i++){
-                    final Uri fileUri = data.getClipData().getItemAt(i).getUri();
-                    String fileName = getFileName(fileUri);
+                    for(int i=0; i<totalItemSelected; i++) {
+                        final Uri fileUri = data.getClipData().getItemAt(i).getUri();
+                        String fileName = getFileName(fileUri);
 
-                    fileNameList.add(fileName);
-                    fileDoneList.add("Uploading");
-                    uploadPicture.notifyDataSetChanged();
+                        fileNameList.add(fileName);
+                        fileDoneList.add("Uploading");
+                        uploadPicture.notifyDataSetChanged();
 
-                    final StorageReference imageToUpload = mStorage.child("Images").child(fileName);
-                    final DatabaseReference fileToUpload = myRef.child("Datas");
-
-
-                    final int finalI = i;
-
-                    imageToUpload.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            //Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
+                        final StorageReference imageToUpload = mStorage.child("Images").child(fileName);
+                        final DatabaseReference fileToUpload = myRef.child("Datas");
 
 
-                            fileDoneList.remove(finalI);
-                            fileDoneList.add(finalI, "Done");
+                        final int finalI = i;
 
-                            uploadPicture.notifyDataSetChanged();
-
-                            Task<Uri> downloadUrl = imageToUpload.getDownloadUrl();
-                            downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String downloadedUrl = uri.toString();
-                                    ImageInDatabase save = new ImageInDatabase();
-                                    save.setImageUrl(downloadedUrl);
-                                    save.setFilename(getFileName(fileUri));
-                                    fileToUpload.push().setValue(save);
-                                }
-                            });
-                        }
-                    });
+                        imageToUpload.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                //Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
 
 
-                    //update with generated key(new)
-                    //String key = fileToUpload.getKey();
-                    //saveImageData.setKey(key);
+                                fileDoneList.remove(finalI);
+                                fileDoneList.add(finalI, "Done");
+
+                                uploadPicture.notifyDataSetChanged();
+
+                                Task<Uri> downloadUrl = imageToUpload.getDownloadUrl();
+                                downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        String downloadedUrl = uri.toString();
+                                        ImageInDatabase save = new ImageInDatabase();
+                                        save.setImageUrl(downloadedUrl);
+                                        save.setFilename(getFileName(fileUri));
+                                        fileToUpload.push().setValue(save);
+                                    }
+                                });
+                            }
+                        });
+
+                    }
+                }else{
+                    Toast.makeText(ymain.this, "Please select at least 4 photos", Toast.LENGTH_SHORT).show();
                 }
-
-                //Toast.makeText(MainActivity.this, "Selected Multiple Files", Toast.LENGTH_SHORT).show();
-
             }else if (data.getData() != null){
                 Toast.makeText(ymain.this, "Selected Single Files", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
-
-    /*private void downloadFile(Context context, String fileName, String fileExtension, String destinationDirectory, String url) {
-        DownloadManager downloadManager = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri.parse(url);
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(context, destinationDirectory, fileName + fileExtension);
-        downloadManager.enqueue(request);
-    }*/
 
     public String getFileName(Uri uri){
         String result = null;

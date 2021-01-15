@@ -11,47 +11,45 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class UploadPicture extends RecyclerView.Adapter<UploadPicture.ViewHolder> {
+public class UploadPictureForPassword extends RecyclerView.Adapter<UploadPicture.ViewHolder> {
 
     public List<String> fileNameList;
-    public List<String> fileDoneList;
     public List<String> fileDoneListPW;
 
-    public UploadPicture(List<String> fileNameList, List<String> fileDoneList){
-        this.fileDoneList = fileDoneList;
+    public UploadPictureForPassword(List<String> fileNameList, List<String> fileDoneListPW){
+        this.fileDoneListPW = fileDoneListPW;
         this.fileNameList = fileNameList;
     }
 
-
-
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UploadPicture.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-        return new ViewHolder(v);
+        return new UploadPicture.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UploadPicture.ViewHolder holder, int position) {
         String fileName = fileNameList.get(position);
         holder.fileNameView.setText(fileName);
 
-        String fileDone = fileDoneList.get(position);
+        String fileDone = fileDoneListPW.get(position);
 
         if (fileDone.equals("Uploading")){
             holder.fileDoneView.setImageResource(R.drawable.loading_icon2);
         }
         else{
-            holder.fileDoneView.setImageResource(R.drawable.check_circle);
+            holder.fileDoneView.setImageResource(R.drawable.checked_icon);
         }
     }
+
 
     @Override
     public int getItemCount() {
         return fileNameList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         View sView;
 
         public TextView fileNameView;

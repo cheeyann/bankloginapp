@@ -40,13 +40,13 @@ public class UploadPasswords extends AppCompatActivity {
 
     private static final int RESULT_LOAD_IMAGE = 1;
     private Button btnUploadPW;
-    private Button btnNext;
+    private Button btnDone;
     private Button btnBack;
     private RecyclerView mUploadList;
 
     private List<String> fileNameList;
     private List<String> fileDoneList;
-    private UploadPicture uploadPicture;
+    private UploadPictureForPassword uploadPicture;
 
     String encryptedFilename;
 
@@ -68,14 +68,14 @@ public class UploadPasswords extends AppCompatActivity {
         myRef = FirebaseDatabase.getInstance().getReference("Datas");
 
         btnUploadPW = (Button) findViewById(R.id.button_uploadpw);
-        btnNext = (Button)findViewById(R.id.btnNext2);
+        btnDone = (Button)findViewById(R.id.btnNext2);
         btnBack = (Button)findViewById(R.id.button_backToUpload);
         mUploadList = (RecyclerView) findViewById(R.id.recyclerView2);
 
         fileNameList = new ArrayList<>();
         fileDoneList = new ArrayList<>();
 
-        uploadPicture = new UploadPicture(fileNameList, fileDoneList);
+        uploadPicture = new UploadPictureForPassword(fileNameList, fileDoneList);
 
         mUploadList.setLayoutManager(new LinearLayoutManager(this));
         mUploadList.setHasFixedSize(true);
@@ -93,21 +93,25 @@ public class UploadPasswords extends AppCompatActivity {
             }
         });
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
+        btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UploadPasswords.this, afterSetPassword.class);
-                startActivity(intent);
-                finish();
+                if (fileDoneList.size() != 0) {
+                    Toast.makeText(UploadPasswords.this, "You have been registered successfully!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(UploadPasswords.this, afterSetPassword.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(UploadPasswords.this, "Please upload at least 1 photo.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (UploadPasswords.this, ymain.class);
+                Intent intent = new Intent(UploadPasswords.this, MainActivity.class);
                 startActivity(intent);
-                finish();
+
             }
         });
     }
@@ -124,18 +128,14 @@ public class UploadPasswords extends AppCompatActivity {
 
                 for (int i = 0; i < totalItemSelected; i++) {
                     final Uri fileUri = data.getClipData().getItemAt(i).getUri();
-                    String fileName = getFileName(fileUri);
-                    String fileNameOnly = fileName.replaceFirst("[.][^.]+$", "");
-
-                    try {
-                        encryptedFilename = encrypt(fileNameOnly);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    final String fileName = getFileName(fileUri);
+                    //String fileNameOnly = fileName.replaceFirst("[.][^.]+$", "");
 
                     fileNameList.add(fileName);
                     fileDoneList.add("Uploading");
                     uploadPicture.notifyDataSetChanged();
+
+
 
                     final StorageReference imageToUpload = mStorage.child("Images").child(fileName);
                     final DatabaseReference fileToUpload = myRef.child("Datas");
@@ -153,7 +153,7 @@ public class UploadPasswords extends AppCompatActivity {
 
                             uploadPicture.notifyDataSetChanged();
 
-                            pwToUpload.push().setValue(encryptedFilename);
+
 
                             Task<Uri> downloadUrl = imageToUpload.getDownloadUrl();
                             downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -164,6 +164,16 @@ public class UploadPasswords extends AppCompatActivity {
                                     save.setImageUrl(downloadedUrl);
                                     save.setFilename(getFileName(fileUri));
                                     fileToUpload.push().setValue(save);
+
+                                    try {
+                                        encryptedFilename = encrypt(fileName);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    PasswordList pwlist = new PasswordList();
+                                    pwlist.setPassword(encryptedFilename);
+                                    pwToUpload.push().setValue(pwlist);
                                 }
                             });
                         }

@@ -94,7 +94,7 @@ public class signIn extends AppCompatActivity {
                                                 //yes correct
                                                 progressBar.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "All data correct, Verified", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(getApplicationContext(),showPhoneno.class);
+                                                Intent intent = new Intent(getApplicationContext(),ymain.class);
                                                 SessionManager sessionManager = new SessionManager(signIn.this);
                                                 sessionManager.createLoginSession(idfromdb, namefromdb, icfromdb, phonefromdb, phonefromdb,"null");
                                                 /*
