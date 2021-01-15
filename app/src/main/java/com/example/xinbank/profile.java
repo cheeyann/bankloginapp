@@ -44,7 +44,7 @@ public class profile extends AppCompatActivity {
         getuserbankaccfromdb();
         String ac = "false";
 
-        if(accontrolfromsession.equals(ac)) {
+        if(accontrolfromsession.toString().equals(ac)) {
             tranferbtn.setVisibility(View.GONE);
         }
 

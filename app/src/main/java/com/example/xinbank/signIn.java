@@ -59,14 +59,14 @@ public class signIn extends AppCompatActivity {
         final String sscardcvv = scardcvv.getText().toString().trim();
         final String sscardpin = scardpin.getText().toString().trim();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("imeiExist");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ICExists");
         Query checkuser = reference.orderByChild("ic").equalTo(ssid);
 
         checkuser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    final String idfromdb= dataSnapshot.child(ssid).child("_id").getValue(String.class);
+                    final String idfromdb= dataSnapshot.child(ssid).child("id").getValue(String.class);
                     DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("Customers");
                     //get cus data
                     Query checkuser2 = reference2.orderByChild("user_id").equalTo(idfromdb);
