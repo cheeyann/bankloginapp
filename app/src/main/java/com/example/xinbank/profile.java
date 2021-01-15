@@ -43,10 +43,12 @@ public class profile extends AppCompatActivity {
         getusernamefromdb();
         getuserbankaccfromdb();
         String ac = "false";
-
+/*
         if(accontrolfromsession.toString().equals(ac)) {
             tranferbtn.setVisibility(View.GONE);
         }
+
+ */
 
         logoutBTN.setOnClickListener(new View.OnClickListener() {
             @Override
